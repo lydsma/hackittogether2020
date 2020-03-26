@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script>
+            know = {
+                "hello" : "hi",
+                "how are you?" : "good",
+                "ok" : ":)"
+            };
+						function talk() {
+						            	var prompt = document.getElementById("chatLog").innerHTML;
+						            	var user = document.getElementById("userBox").value;
+						                console.log(JSON.stringify(user));
+						                var prompt2 = "Tell me a little more about your "+ sessionStorage.getItem('buttonValue') + " problem!" + "<br>";
+						            	if (prompt == "Not a problem! Could you remind me of your username? <br>") {
+						            		sessionStorage.setItem('username', (user));
+						            		sessionStorage.setItem('num', 1);
+						            		document.getElementById("userBox").value = "";
+						            		document.getElementById("chatLog").innerHTML += user+"<br>";
+						                	document.getElementById("chatLog").innerHTML += prompt2;
+						                } else if (sessionStorage.getItem('num') == 1) {
+						                	sessionStorage.setItem('desc', (user));
+															sessionStorage.setItem('num', 2);
+						                	document.getElementById("userBox").value = "";
+						                	document.getElementById("chatLog").innerHTML += user+"<br>";
+						                	$.post('/savenewchat', {
+						                			email: sessionStorage.getItem('username'),
+						                			topic: sessionStorage.getItem('buttonValue'),
+						                			description: sessionStorage.getItem('desc')
+						                		}, function(data){
+						                			console.log('success! ' + JSON.stringify(data));
+						                	});
+															document.getElementById("chatLog").innerHTML += "You last spoke to Bob Smith for a Technical issue. Would you like to speak to him again? <br>";
+						                } else if (sessionStorage.getItem('num') == 2) {
+															document.getElementById("userBox").value = "";
+						                	document.getElementById("chatLog").innerHTML += user+"<br>";
+															sessionStorage.setItem('num', 0);
+																document.getElementById("chatLog").innerHTML += "Sounds good, will connect you shortly. <br>";
+														} else {
+															document.getElementById("userBox").value = "";
+						                	document.getElementById("chatLog").innerHTML += user+"<br>";
+															if (user in know) {
+							                    document.getElementById("chatLog").innerHTML += know[user]+"<br>";
+							                } else {
+							                    document.getElementById("chatLog").innerHTML += "I don't understand...<br>";
+							                }
+						           		 }
+						            }
+									function setColor(btn, color){
+										var count=1;
+										var property = document.getElementById(btn);
+										sessionStorage.setItem('buttonValue', (document.getElementById(btn).value));
+										//console.log(JSON.stringify(document.getElementById(btn).value));
+										console.log(JSON.stringify(sessionStorage.getItem('buttonValue')));
+											if (count == 0){
+												   property.style.backgroundColor = "#FFFFFF"
+												    count=1;
+												    }
+											else {
+												    property.style.backgroundColor = "#0EA954"
+												     count=0;
+												    }
+										document.getElementById("chatLog").innerHTML += "Not a problem! Could you remind me of your username? <br>";
+										}
+
+    </script>
+		<style type="text/css">
+			* {
+			 box-sizing: border-box;
+			}
+			body {
+				font-family: Arial;
+				padding: 10px;
+				background: white;	//8am change color							<!-- add things -->
+			}
+			.header {
+				float: left;
+				text-align: center;
+				padding: 2px 2px;
+				margin-bottom: 10px;
+				//background: white;
+			}
+			.header h1 {
+				  font-size: 35px;
+				  color: Black;
+				}
+			.topnav {
+			  overflow: hidden;
+			  background-color: white;
+			}
+
+			/* Style the topnav links */
+			.topnav a {
+			  float: right;
+			  display: block;
+			  color: #4B4B4B;
+			  font-size: 15px;
+			  text-align: center;
+			  padding: 30px 10px;
+			  text-decoration: none;
+			}
+
+			/* Change color on hover */
+			.topnav a:hover {
+			  background-color: white;
+			  color: #0EA954;
+			}.searchbar, .postContent {
+				float: left;
+				width: 100%;
+				line-height: 20px;
+				padding: 0px 20px 20px 20px;
+			}
+			.chatTitle {
+				text-align: center;
+				float: left;
+				width: 100%;
+				font-size: 40x;
+				color: #0EA954
+			}
+			.chatList {
+				text-align: center;
+				float: left;
+				width: 100%;
+				line-height: 20px;
+				padding: 0px 10px 20px 10px;
+				color: Black
+			}
+			input {
+				width: 500px;
+			}
+			textarea, #commentInput {
+				outline: none;
+				resize: none;
+				width: 500px;
+				height: 100px;
+				max-width: 100%;
+			}
+			.post, #post {
+				float: left;
+				padding: 20px 20px;
+			}
+			#commentInput {
+				float: left;
+				width: 500px;
+				height: 40px;
+			}
+			ul {
+    			padding: 5px;
+    			display: inline-block;
+			}
+			.mainChat {
+				font-size: 12px;
+				padding: 5px 2px;
+				color: Black;
+			}
+			.mainChat input {
+				width: auto;
+				margin: 0 10px;
+			}
+
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+		#chats { list-style-type: none;
+				text-align: left;
+				font-size: 14px;
+				padding: 10px 5px;
+				color: Black; }
+     	#chats li { padding: 10px 10px; }
+     	#chats li:nth-child(odd) { background: #eee; }
+     	#renames { list-style-type: none;
+     	           width: auto; }
+     	#renames li { padding: 3px 3px; }
+     	#renames li:nth-child(odd) { background: #eee; }
+     	#leaves { list-style-type: none; }
+     	#leaves li { padding: 3px 3px; }
+     	#leaves li:nth-child(even) { background: #eee; }
+
+			#button {
+				color: white;
+			}
+
+		</style>
+
+	</head>
+
+	<body>
+		<div class="topnav">
+		<div class="header">
+			<img src="logo.png" alt="IHS Logo" style="height: 80px">
+		</div>
+
+		<div id="notifications">
+		    	<span id="notifications-count"></span>
+		  		<div id="notifications-dropdown"></div>
+		  	</div>
+		  	 <a href="/logout" onclick="postActiveStatusFalse()">LOGOUT</a>
+		    <a href="/chat">CHAT</a>
+		    <a href="/profile">MY PROFILE</a>
+		    <a class="active" href="/home">HOME</a>
+		</div>
+  		<h1 style="color:#0EA954;", float:"top", class="chatTitle"><b>Chat With Us!</b></h1>
+  		<div class="chatList">
+				<p id = "greeting">Hello! How can I help you?</p>
+
+				<input type="button" id="techButton" value = "Technical/IT" onclick="setColor('techButton', '#0EA954')";/>
+				<input type="button" id="salesButton" value = "Sales"  onclick="setColor('salesButton', '#0EA954')";/>
+				<input type="button" id="accountButton" value = "Account Exec"  onclick="setColor('accountButton', '#0EA954')";/>
+				<input type="button" id="otherButton" value = "Other"  onclick="setColor('otherButton', '#0EA954')";/>
+
+				<p id="chatLog"></p>
+		    <input id="userBox" type="text" onkeydown="if (event.keyCode == 13) {talk()}">
+			</div>
+
+	</body>
+</html>
